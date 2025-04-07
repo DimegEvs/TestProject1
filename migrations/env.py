@@ -7,8 +7,8 @@ from alembic import context
 from database import Base
 from config import settings
 from database import metadata
-from models.reservation import Reservation
 from models.table import Table
+from models.reservation import Reservation
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 
