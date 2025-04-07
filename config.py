@@ -1,14 +1,19 @@
 import os
 
-from pydantic.v1 import BaseSettings, Field
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    db_host: str = Field(..., env="DB_HOST")
-    db_port: int = Field(..., env="DB_PORT")
-    db_name: str = Field(..., env="DB_NAME")
-    db_user: str = Field(..., env="DB_USER")
-    db_pass: str = Field(..., env="DB_PASS")
+    DB_HOST: str
+    DB_PORT: str
+    DB_NAME: str
+    DB_USER: str
+    DB_PASS: str
 
     class Config:
         env_file = ".env"
+        env_file_encoding = 'utf-8'
+        case_sensitive = True
+
+
+settings = Settings()
