@@ -44,8 +44,6 @@ class BaseService():
         async with async_session_maker() as session:
             query = delete(cls.model).filter_by(**filter_by)
             result = await session.execute(query)
-            if result.rowcount == 0:
-                raise NoResultFound(f"Не найдено для удаления: {filter_by}")
             await session.commit()
 
     @classmethod
@@ -54,3 +52,10 @@ class BaseService():
             query = select(cls.model).filter(*(getattr(cls.model, key) == value for key, value in filter_by.items()))
             result = await session.execute(query)
             return result.mappings().one_or_none() is not None
+
+    @classmethod
+    async def get_one_or_none(cls, **filter_by):
+        async with async_session_maker() as session:
+            query = select(cls.model.__table__.columns).filter_by(**filter_by)
+            result = await session.execute(query)
+            return result.mappings().one_or_none()

@@ -6,15 +6,13 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
 
-from config import settings
-
-DATABASE_URL = f"postgresql+asyncpg://{settings.DB_USER}:{settings.DB_PASS}@{settings.DB_HOST}:{settings.DB_PORT}/{settings.DB_NAME}"
+from config import settings, get_database_url
 
 metadata = MetaData()
 
 Base = declarative_base(metadata=metadata)
 
-engine = create_async_engine(DATABASE_URL)
+engine = create_async_engine(get_database_url())
 async_session_maker = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 

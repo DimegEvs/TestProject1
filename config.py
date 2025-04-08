@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     DB_NAME: str
     DB_USER: str
     DB_PASS: str
+    DB_NAME_TEST: str
 
     class Config:
         env_file = ".env"
@@ -17,3 +18,15 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+
+def get_database_url(test: bool = False) -> str:
+    db_name = settings.DB_NAME
+
+    if test:
+        db_name = settings.DB_NAME_TEST or f"{settings.DB_NAME}_test"
+
+    return (
+        f"postgresql+asyncpg://{settings.DB_USER}:{settings.DB_PASS}"
+        f"@{settings.DB_HOST}:{settings.DB_PORT}/{db_name}"
+    )
