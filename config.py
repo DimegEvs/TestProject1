@@ -1,7 +1,7 @@
 import os
 
+from pydantic import ConfigDict
 from pydantic_settings import BaseSettings
-
 
 class Settings(BaseSettings):
     DB_HOST: str
@@ -11,10 +11,11 @@ class Settings(BaseSettings):
     DB_PASS: str
     DB_NAME_TEST: str
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = 'utf-8'
-        case_sensitive = True
+    model_config = ConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        case_sensitive=True
+    )
 
 
 settings = Settings()

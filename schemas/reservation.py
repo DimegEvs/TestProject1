@@ -1,5 +1,6 @@
-from pydantic import BaseModel
-from datetime import datetime
+from dateutil.parser import parser
+from pydantic import BaseModel, ConfigDict, validator, field_validator
+from datetime import datetime, timezone
 
 
 class ReservationBase(BaseModel):
@@ -8,6 +9,9 @@ class ReservationBase(BaseModel):
     reservation_time: datetime
     duration_minutes: int
 
+    @field_validator('reservation_time', mode='after')
+    def remove_timezone(cls, v: datetime) -> datetime:
+        return v.replace(tzinfo=None)
 
 class ReservationCreate(ReservationBase):
     pass
@@ -16,5 +20,4 @@ class ReservationCreate(ReservationBase):
 class ReservationRead(ReservationBase):
     id: int
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
