@@ -24,7 +24,6 @@ async def get_reservations(session: AsyncSession = Depends(get_async_session)):
         reservations = await ReservationService.get_all(session=session)
         return reservations
     except Exception as e:
-        print(str(e))
         raise HTTPException(status_code=500, detail="Server Error")
 
 
@@ -38,7 +37,6 @@ async def create_reservation(reservation: ReservationCreate, session: AsyncSessi
         new_reservation = await ReservationService.insert(session=session, reservation=reservation)
         return new_reservation
     except HTTPException as e:
-        print(str(e))
         raise HTTPException(status_code=e.status_code, detail=e.detail)
 
 
@@ -49,5 +47,4 @@ async def delete_reservation(reservation_id: int, session: AsyncSession = Depend
             raise HTTPException(status_code=404, detail="Reservation not found")
         await ReservationService.delete(session=session, id=reservation_id)
     except HTTPException as e:
-        print(str(e))
         raise HTTPException(e.status_code, e.detail)

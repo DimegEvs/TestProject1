@@ -30,10 +30,11 @@ async def create_table(table: TableCreate, session: AsyncSession = Depends(get_a
     try:
         if await TableService.exists(session=session, name=table.name):
             raise HTTPException(status_code=409, detail="Table with this name already exists")
+        if table.seats <= 0:
+            raise HTTPException(status_code=422, detail="The number of seats cannot be negative")
         result = await TableService.insert(data=table, session=session)
         return result
     except HTTPException as e:
-        print(str(e))
         raise HTTPException(e.status_code, e.detail)
 
 
@@ -45,6 +46,5 @@ async def delete_table(table_id: int, session: AsyncSession = Depends(get_async_
         await TableService.delete(session=session, id=table_id)
         return status.HTTP_204_NO_CONTENT
     except HTTPException as e:
-        print(str(e))
         raise HTTPException(e.status_code, e.detail)
 
