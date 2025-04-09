@@ -12,8 +12,8 @@
 1. Клонируйте репозиторий:
 
 ```bash
-git clone https://github.com/your-username/testproject1.git
-cd testproject1
+git clone https://github.com/DimegEvs/TestProject1.git
+cd TestProject1
 ```
 
 2.(Опционально) Можно изменить файл `.env` в корне проекта:
