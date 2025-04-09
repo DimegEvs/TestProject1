@@ -1,5 +1,7 @@
 #!/bin/bash
 
+mkdir -p /app/migrations/versions
+
 alembic revision --autogenerate -m "Create Tables"
 
 alembic upgrade head
