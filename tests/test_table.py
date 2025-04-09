@@ -24,5 +24,5 @@ async def test_delete_table(client, created_table):
     response = await client.delete(f"/tables/{created_table.get('id')}")
     assert response.status_code == 204
 
-    response = await client.delete("/tables/9999")
+    response = await client.delete(f"/tables/{created_table.get('id')}")
     assert response.status_code == 404
