@@ -1,0 +1,58 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - fastapi_network
+
+  web:
+    build: .
+    command: ["/app/docker/app.sh"]
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      DB_NAME_TEST: ${DB_NAME_TEST}
+    volumes:
+      - .:/app
+    networks:
+      - fastapi_network
+
+  test:
+    build: .
+    depends_on:
+      - db
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME_TEST}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      DB_NAME_TEST: ${DB_NAME_TEST}
+    volumes:
+      - .:/app
+    command: >
+      sh -c "pytest tests"
+    networks:
+      - fastapi_network
+
+networks:
+  fastapi_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
